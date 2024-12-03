@@ -168,8 +168,8 @@ import (
 )
 
 const (
-	AccountAddressPrefix = "stride"
-	Name                 = "stride"
+	AccountAddressPrefix = "liquid"
+	Name                 = "liquid"
 )
 
 func getGovProposalHandlers() []govclient.ProposalHandler {
