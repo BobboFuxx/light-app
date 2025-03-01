@@ -9,8 +9,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/Stride-Labs/stride/v24/utils"
-	"github.com/Stride-Labs/stride/v24/x/stakedym/types"
+	"github.com/Stride-Labs/stride/v26/utils"
+	"github.com/Stride-Labs/stride/v26/x/stakedym/types"
 )
 
 // Takes custody of staked tokens in an escrow account, updates the current
@@ -187,8 +187,8 @@ func (k Keeper) ConfirmUndelegation(ctx sdk.Context, recordId uint64, txHash str
 	delegatedBalanceBefore := hostZone.DelegatedBalance
 
 	// update the record's txhash, status, and unbonding completion time
-	unbondingLength := time.Duration(hostZone.UnbondingPeriodSeconds) * time.Second // 21 days
-	unbondingCompletionTime := uint64(ctx.BlockTime().Add(unbondingLength).Unix())  // now + 21 days
+	unbondingLength := time.Duration(utils.UintToInt(hostZone.UnbondingPeriodSeconds)) * time.Second // 21 days
+	unbondingCompletionTime := utils.IntToUint(ctx.BlockTime().Add(unbondingLength).Unix())          // now + 21 days
 
 	record.UndelegationTxHash = txHash
 	record.Status = types.UNBONDING_IN_PROGRESS
@@ -282,7 +282,7 @@ func (k Keeper) VerifyImpliedRedemptionRateFromUnbonding(ctx sdk.Context, stToke
 // Records are annotated with a new status UNBONDED
 func (k Keeper) MarkFinishedUnbondings(ctx sdk.Context) {
 	for _, unbondingRecord := range k.GetAllUnbondingRecordsByStatus(ctx, types.UNBONDING_IN_PROGRESS) {
-		if ctx.BlockTime().Unix() > int64(unbondingRecord.UnbondingCompletionTimeSeconds) {
+		if ctx.BlockTime().Unix() > utils.UintToInt(unbondingRecord.UnbondingCompletionTimeSeconds) {
 			unbondingRecord.Status = types.UNBONDED
 			k.SetUnbondingRecord(ctx, unbondingRecord)
 		}

@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"math"
 	"sort"
 	"strconv"
 	"strings"
@@ -18,9 +19,9 @@ import (
 
 	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
 
-	config "github.com/Stride-Labs/stride/v24/cmd/strided/config"
-	icacallbacktypes "github.com/Stride-Labs/stride/v24/x/icacallbacks/types"
-	recordstypes "github.com/Stride-Labs/stride/v24/x/records/types"
+	config "github.com/Stride-Labs/stride/v26/cmd/strided/config"
+	icacallbacktypes "github.com/Stride-Labs/stride/v26/x/icacallbacks/types"
+	recordstypes "github.com/Stride-Labs/stride/v26/x/records/types"
 )
 
 func FilterDepositRecords(arr []recordstypes.DepositRecord, condition func(recordstypes.DepositRecord) bool) (ret []recordstypes.DepositRecord) {
@@ -75,6 +76,28 @@ func Uint64MapKeys[V any](m map[uint64]V) []uint64 {
 	}
 	sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
 	return keys
+}
+
+// Converts from uint64 -> int64 with a panic check for overflow
+// This should only be used on values where it is known that overflow
+// is not possible (e.g. params, block times, etc.), as in those scenarios
+// we want to make sure we don't silently fail
+func UintToInt(u uint64) int64 {
+	if u > math.MaxInt64 {
+		panic(fmt.Sprintf("uint64 value %d too large for int64", u))
+	}
+	return int64(u)
+}
+
+// Converts from int64 -> uint64 with a panic check for underflow
+// This should only be used on values where it is known that underflow
+// is not possible (e.g. params, block times, etc.), as in those scenarios
+// we want to make sure we don't silently fail
+func IntToUint(i int64) uint64 {
+	if i < 0 {
+		panic(fmt.Sprintf("int64 value %d is negative and can't be converted to uint64", i))
+	}
+	return uint64(i)
 }
 
 //==============================  ADDRESS VERIFICATION UTILS  ================================

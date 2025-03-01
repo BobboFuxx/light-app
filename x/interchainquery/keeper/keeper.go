@@ -13,8 +13,8 @@ import (
 	connectiontypes "github.com/cosmos/ibc-go/v7/modules/core/03-connection/types"
 	ibckeeper "github.com/cosmos/ibc-go/v7/modules/core/keeper"
 
-	"github.com/Stride-Labs/stride/v24/utils"
-	"github.com/Stride-Labs/stride/v24/x/interchainquery/types"
+	"github.com/Stride-Labs/stride/v26/utils"
+	"github.com/Stride-Labs/stride/v26/x/interchainquery/types"
 )
 
 // Keeper of this module maintains collections of registered zones.
@@ -59,7 +59,7 @@ func (k *Keeper) SubmitICQRequest(ctx sdk.Context, query types.Query, forceUniqu
 	}
 
 	// Set the timeout using the block time and timeout duration
-	timeoutTimestamp := uint64(ctx.BlockTime().UnixNano() + query.TimeoutDuration.Nanoseconds())
+	timeoutTimestamp := utils.IntToUint(ctx.BlockTime().UnixNano() + query.TimeoutDuration.Nanoseconds())
 	query.TimeoutTimestamp = timeoutTimestamp
 
 	// Generate and set the query ID - optionally force it to be unique

@@ -11,12 +11,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 
-	"github.com/Stride-Labs/stride/v24/utils"
-	autopilotkeeper "github.com/Stride-Labs/stride/v24/x/autopilot/keeper"
-	autopilottypes "github.com/Stride-Labs/stride/v24/x/autopilot/types"
-	claimkeeper "github.com/Stride-Labs/stride/v24/x/claim/keeper"
-	"github.com/Stride-Labs/stride/v24/x/claim/types"
-	claimtypes "github.com/Stride-Labs/stride/v24/x/claim/types"
+	"github.com/Stride-Labs/stride/v26/utils"
+	autopilotkeeper "github.com/Stride-Labs/stride/v26/x/autopilot/keeper"
+	autopilottypes "github.com/Stride-Labs/stride/v26/x/autopilot/types"
+	claimkeeper "github.com/Stride-Labs/stride/v26/x/claim/keeper"
+	"github.com/Stride-Labs/stride/v26/x/claim/types"
+	claimtypes "github.com/Stride-Labs/stride/v26/x/claim/types"
 )
 
 var (
@@ -76,7 +76,7 @@ func CreateUpgradeHandler(
 			Identifier:       EvmosAirdropIdentifier,
 			ChainId:          EvmosChainId,
 			Denom:            claimtypes.DefaultClaimDenom,
-			StartTime:        uint64(AirdropStartTime.Unix()),
+			StartTime:        utils.IntToUint(AirdropStartTime.Unix()),
 			Duration:         duration,
 			AutopilotEnabled: true,
 		}); err != nil {

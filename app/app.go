@@ -125,46 +125,55 @@ import (
 	evmosvestingtypes "github.com/evmos/vesting/x/vesting/types"
 	"github.com/spf13/cast"
 
-	"github.com/Stride-Labs/stride/v24/utils"
-	airdrop "github.com/Stride-Labs/stride/v24/x/airdrop"
-	airdropkeeper "github.com/Stride-Labs/stride/v24/x/airdrop/keeper"
-	airdroptypes "github.com/Stride-Labs/stride/v24/x/airdrop/types"
-	"github.com/Stride-Labs/stride/v24/x/autopilot"
-	autopilotkeeper "github.com/Stride-Labs/stride/v24/x/autopilot/keeper"
-	autopilottypes "github.com/Stride-Labs/stride/v24/x/autopilot/types"
-	"github.com/Stride-Labs/stride/v24/x/claim"
-	claimkeeper "github.com/Stride-Labs/stride/v24/x/claim/keeper"
-	claimtypes "github.com/Stride-Labs/stride/v24/x/claim/types"
-	claimvesting "github.com/Stride-Labs/stride/v24/x/claim/vesting"
-	claimvestingtypes "github.com/Stride-Labs/stride/v24/x/claim/vesting/types"
-	epochsmodule "github.com/Stride-Labs/stride/v24/x/epochs"
-	epochsmodulekeeper "github.com/Stride-Labs/stride/v24/x/epochs/keeper"
-	epochsmoduletypes "github.com/Stride-Labs/stride/v24/x/epochs/types"
-	icacallbacksmodule "github.com/Stride-Labs/stride/v24/x/icacallbacks"
-	icacallbacksmodulekeeper "github.com/Stride-Labs/stride/v24/x/icacallbacks/keeper"
-	icacallbacksmoduletypes "github.com/Stride-Labs/stride/v24/x/icacallbacks/types"
-	icaoracle "github.com/Stride-Labs/stride/v24/x/icaoracle"
-	icaoraclekeeper "github.com/Stride-Labs/stride/v24/x/icaoracle/keeper"
-	icaoracletypes "github.com/Stride-Labs/stride/v24/x/icaoracle/types"
-	"github.com/Stride-Labs/stride/v24/x/interchainquery"
-	interchainquerykeeper "github.com/Stride-Labs/stride/v24/x/interchainquery/keeper"
-	interchainquerytypes "github.com/Stride-Labs/stride/v24/x/interchainquery/types"
-	"github.com/Stride-Labs/stride/v24/x/mint"
-	mintkeeper "github.com/Stride-Labs/stride/v24/x/mint/keeper"
-	minttypes "github.com/Stride-Labs/stride/v24/x/mint/types"
-	recordsmodule "github.com/Stride-Labs/stride/v24/x/records"
-	recordsmodulekeeper "github.com/Stride-Labs/stride/v24/x/records/keeper"
-	recordsmoduletypes "github.com/Stride-Labs/stride/v24/x/records/types"
-	stakedym "github.com/Stride-Labs/stride/v24/x/stakedym"
-	stakedymkeeper "github.com/Stride-Labs/stride/v24/x/stakedym/keeper"
-	stakedymtypes "github.com/Stride-Labs/stride/v24/x/stakedym/types"
-	stakeibcmodule "github.com/Stride-Labs/stride/v24/x/stakeibc"
-	stakeibcclient "github.com/Stride-Labs/stride/v24/x/stakeibc/client"
-	stakeibcmodulekeeper "github.com/Stride-Labs/stride/v24/x/stakeibc/keeper"
-	stakeibcmoduletypes "github.com/Stride-Labs/stride/v24/x/stakeibc/types"
-	staketia "github.com/Stride-Labs/stride/v24/x/staketia"
-	staketiakeeper "github.com/Stride-Labs/stride/v24/x/staketia/keeper"
-	staketiatypes "github.com/Stride-Labs/stride/v24/x/staketia/types"
+	"github.com/Stride-Labs/stride/v26/utils"
+	airdrop "github.com/Stride-Labs/stride/v26/x/airdrop"
+	airdropkeeper "github.com/Stride-Labs/stride/v26/x/airdrop/keeper"
+	airdroptypes "github.com/Stride-Labs/stride/v26/x/airdrop/types"
+	auction "github.com/Stride-Labs/stride/v26/x/auction"
+	auctionkeeper "github.com/Stride-Labs/stride/v26/x/auction/keeper"
+	auctiontypes "github.com/Stride-Labs/stride/v26/x/auction/types"
+	"github.com/Stride-Labs/stride/v26/x/autopilot"
+	autopilotkeeper "github.com/Stride-Labs/stride/v26/x/autopilot/keeper"
+	autopilottypes "github.com/Stride-Labs/stride/v26/x/autopilot/types"
+	"github.com/Stride-Labs/stride/v26/x/claim"
+	claimkeeper "github.com/Stride-Labs/stride/v26/x/claim/keeper"
+	claimtypes "github.com/Stride-Labs/stride/v26/x/claim/types"
+	claimvesting "github.com/Stride-Labs/stride/v26/x/claim/vesting"
+	claimvestingtypes "github.com/Stride-Labs/stride/v26/x/claim/vesting/types"
+	epochsmodule "github.com/Stride-Labs/stride/v26/x/epochs"
+	epochsmodulekeeper "github.com/Stride-Labs/stride/v26/x/epochs/keeper"
+	epochsmoduletypes "github.com/Stride-Labs/stride/v26/x/epochs/types"
+	icacallbacksmodule "github.com/Stride-Labs/stride/v26/x/icacallbacks"
+	icacallbacksmodulekeeper "github.com/Stride-Labs/stride/v26/x/icacallbacks/keeper"
+	icacallbacksmoduletypes "github.com/Stride-Labs/stride/v26/x/icacallbacks/types"
+	icaoracle "github.com/Stride-Labs/stride/v26/x/icaoracle"
+	icaoraclekeeper "github.com/Stride-Labs/stride/v26/x/icaoracle/keeper"
+	icaoracletypes "github.com/Stride-Labs/stride/v26/x/icaoracle/types"
+	icqoracle "github.com/Stride-Labs/stride/v26/x/icqoracle"
+	icqoraclekeeper "github.com/Stride-Labs/stride/v26/x/icqoracle/keeper"
+	icqoracletypes "github.com/Stride-Labs/stride/v26/x/icqoracle/types"
+	"github.com/Stride-Labs/stride/v26/x/interchainquery"
+	interchainquerykeeper "github.com/Stride-Labs/stride/v26/x/interchainquery/keeper"
+	interchainquerytypes "github.com/Stride-Labs/stride/v26/x/interchainquery/types"
+	"github.com/Stride-Labs/stride/v26/x/mint"
+	mintkeeper "github.com/Stride-Labs/stride/v26/x/mint/keeper"
+	minttypes "github.com/Stride-Labs/stride/v26/x/mint/types"
+	recordsmodule "github.com/Stride-Labs/stride/v26/x/records"
+	recordsmodulekeeper "github.com/Stride-Labs/stride/v26/x/records/keeper"
+	recordsmoduletypes "github.com/Stride-Labs/stride/v26/x/records/types"
+	stakedym "github.com/Stride-Labs/stride/v26/x/stakedym"
+	stakedymkeeper "github.com/Stride-Labs/stride/v26/x/stakedym/keeper"
+	stakedymtypes "github.com/Stride-Labs/stride/v26/x/stakedym/types"
+	stakeibcmodule "github.com/Stride-Labs/stride/v26/x/stakeibc"
+	stakeibcclient "github.com/Stride-Labs/stride/v26/x/stakeibc/client"
+	stakeibcmodulekeeper "github.com/Stride-Labs/stride/v26/x/stakeibc/keeper"
+	stakeibcmoduletypes "github.com/Stride-Labs/stride/v26/x/stakeibc/types"
+	staketia "github.com/Stride-Labs/stride/v26/x/staketia"
+	staketiakeeper "github.com/Stride-Labs/stride/v26/x/staketia/keeper"
+	staketiatypes "github.com/Stride-Labs/stride/v26/x/staketia/types"
+	strdburner "github.com/Stride-Labs/stride/v26/x/strdburner"
+	strdburnerkeeper "github.com/Stride-Labs/stride/v26/x/strdburner/keeper"
+	strdburnertypes "github.com/Stride-Labs/stride/v26/x/strdburner/types"
 )
 
 const (
@@ -236,6 +245,9 @@ var (
 		ibchooks.AppModuleBasic{},
 		ibcwasm.AppModuleBasic{},
 		airdrop.AppModuleBasic{},
+		icqoracle.AppModuleBasic{},
+		auction.AppModuleBasic{},
+		strdburner.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -243,6 +255,7 @@ var (
 		authtypes.FeeCollectorName: nil,
 		distrtypes.ModuleName:      nil,
 		// mint module needs burn access to remove excess validator tokens (it overallocates, then burns)
+		// strdburner module needs burn access to burn STRD tokens that are sent to it
 		ccvconsumertypes.ConsumerRedistributeName:     nil,
 		ccvconsumertypes.ConsumerToSendToProviderName: nil,
 		minttypes.ModuleName:                          {authtypes.Minter, authtypes.Burner},
@@ -260,6 +273,9 @@ var (
 		stakedymtypes.ModuleName:                      {authtypes.Minter, authtypes.Burner},
 		stakedymtypes.FeeAddress:                      nil,
 		wasmtypes.ModuleName:                          {authtypes.Burner},
+		icqoracletypes.ModuleName:                     nil,
+		auctiontypes.ModuleName:                       nil,
+		strdburnertypes.ModuleName:                    {authtypes.Burner},
 	}
 )
 
@@ -348,6 +364,9 @@ type StrideApp struct {
 	StaketiaKeeper        staketiakeeper.Keeper
 	StakedymKeeper        stakedymkeeper.Keeper
 	AirdropKeeper         airdropkeeper.Keeper
+	ICQOracleKeeper       icqoraclekeeper.Keeper
+	AuctionKeeper         auctionkeeper.Keeper
+	StrdBurnerKeeper      strdburnerkeeper.Keeper
 
 	mm           *module.Manager
 	sm           *module.SimulationManager
@@ -404,6 +423,9 @@ func NewStrideApp(
 		ibchookstypes.StoreKey,
 		ibcwasmtypes.StoreKey,
 		airdroptypes.StoreKey,
+		icqoracletypes.StoreKey,
+		auctiontypes.StoreKey,
+		strdburnertypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -542,7 +564,6 @@ func NewStrideApp(
 		keys[packetforwardtypes.StoreKey],
 		nil, // will be zero-value here, reference is set later on with SetTransferKeeper.
 		app.IBCKeeper.ChannelKeeper,
-		app.DistrKeeper,
 		app.BankKeeper,
 		app.HooksICS4Wrapper, // ICS4Wrapper
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
@@ -736,6 +757,8 @@ func NewStrideApp(
 		app.BankKeeper,
 		app.ICAOracleKeeper,
 		app.RatelimitKeeper,
+		app.RecordsKeeper,
+		app.StakeibcKeeper,
 		app.TransferKeeper,
 	)
 	stakeTiaModule := staketia.NewAppModule(appCodec, app.StaketiaKeeper)
@@ -757,6 +780,32 @@ func NewStrideApp(
 		app.AccountKeeper, app.BankKeeper, app.DistrKeeper, app.StakingKeeper,
 	)
 
+	app.ICQOracleKeeper = *icqoraclekeeper.NewKeeper(
+		appCodec,
+		keys[icqoracletypes.StoreKey],
+		&app.InterchainqueryKeeper,
+		app.TransferKeeper,
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
+	icqOracleModule := icqoracle.NewAppModule(appCodec, app.ICQOracleKeeper)
+
+	app.AuctionKeeper = *auctionkeeper.NewKeeper(
+		appCodec,
+		keys[auctiontypes.StoreKey],
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.ICQOracleKeeper,
+	)
+	auctionModule := auction.NewAppModule(appCodec, app.AuctionKeeper)
+
+	app.StrdBurnerKeeper = *strdburnerkeeper.NewKeeper(
+		appCodec,
+		keys[strdburnertypes.StoreKey],
+		app.AccountKeeper,
+		app.BankKeeper,
+	)
+	strdburnerModule := strdburner.NewAppModule(appCodec, app.StrdBurnerKeeper)
+
 	// Register Gov (must be registered after stakeibc)
 	govRouter := govtypesv1beta1.NewRouter()
 	govRouter.AddRoute(govtypes.RouterKey, govtypesv1beta1.ProposalHandler).
@@ -775,6 +824,10 @@ func NewStrideApp(
 
 	// Register ICQ callbacks
 	err = app.InterchainqueryKeeper.SetCallbackHandler(stakeibcmoduletypes.ModuleName, app.StakeibcKeeper.ICQCallbackHandler())
+	if err != nil {
+		return nil
+	}
+	err = app.InterchainqueryKeeper.SetCallbackHandler(icqoracletypes.ModuleName, app.ICQOracleKeeper.ICQCallbackHandler())
 	if err != nil {
 		return nil
 	}
@@ -814,6 +867,7 @@ func NewStrideApp(
 		scopedICAHostKeeper,
 		app.MsgServiceRouter(),
 	)
+	app.ICAHostKeeper.WithQueryRouter(app.GRPCQueryRouter())
 	icaModule := ica.NewAppModule(&app.ICAControllerKeeper, &app.ICAHostKeeper)
 
 	// Create the middleware stacks
@@ -933,6 +987,10 @@ func NewStrideApp(
 		stakeTiaModule,
 		stakeDymModule,
 		airdropModule,
+		stakeTiaModule,
+		icqOracleModule,
+		auctionModule,
+		strdburnerModule,
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -978,6 +1036,9 @@ func NewStrideApp(
 		ibchookstypes.ModuleName,
 		ibcwasmtypes.ModuleName,
 		airdroptypes.ModuleName,
+		icqoracletypes.ModuleName,
+		auctiontypes.ModuleName,
+		strdburnertypes.ModuleName,
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -1019,6 +1080,9 @@ func NewStrideApp(
 		ibchookstypes.ModuleName,
 		ibcwasmtypes.ModuleName,
 		airdroptypes.ModuleName,
+		icqoracletypes.ModuleName,
+		auctiontypes.ModuleName,
+		strdburnertypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -1065,6 +1129,9 @@ func NewStrideApp(
 		ibchookstypes.ModuleName,
 		ibcwasmtypes.ModuleName,
 		airdroptypes.ModuleName,
+		icqoracletypes.ModuleName,
+		auctiontypes.ModuleName,
+		strdburnertypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(app.CrisisKeeper)
@@ -1361,7 +1428,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icacallbacksmoduletypes.ModuleName)
 	paramsKeeper.Subspace(ccvconsumertypes.ModuleName)
 	paramsKeeper.Subspace(autopilottypes.ModuleName)
-	paramsKeeper.Subspace(packetforwardtypes.ModuleName).WithKeyTable(packetforwardtypes.ParamKeyTable())
+	paramsKeeper.Subspace(packetforwardtypes.ModuleName)
 	paramsKeeper.Subspace(icaoracletypes.ModuleName)
 	paramsKeeper.Subspace(claimtypes.ModuleName)
 	paramsKeeper.Subspace(wasmtypes.ModuleName)

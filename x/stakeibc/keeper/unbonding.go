@@ -12,9 +12,9 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/gogoproto/proto"
 
-	"github.com/Stride-Labs/stride/v24/utils"
-	recordstypes "github.com/Stride-Labs/stride/v24/x/records/types"
-	"github.com/Stride-Labs/stride/v24/x/stakeibc/types"
+	"github.com/Stride-Labs/stride/v26/utils"
+	recordstypes "github.com/Stride-Labs/stride/v26/x/records/types"
+	"github.com/Stride-Labs/stride/v26/x/stakeibc/types"
 )
 
 type ValidatorUnbondCapacity struct {
@@ -423,7 +423,7 @@ func (k Keeper) UnbondFromHostZone(ctx sdk.Context, hostZone types.HostZone) (er
 	}
 
 	// Get the undelegation ICA messages and split delegations for the callback
-	undelegateBatchSize := int(hostZone.MaxMessagesPerIcaTx)
+	undelegateBatchSize := int(utils.UintToInt(hostZone.MaxMessagesPerIcaTx))
 	msgs, unbondings, err := k.GetUnbondingICAMessages(
 		hostZone,
 		totalNativeUnbondAmount,

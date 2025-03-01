@@ -3,10 +3,10 @@ package keeper
 import (
 	sdkmath "cosmossdk.io/math"
 
-	"github.com/Stride-Labs/stride/v24/utils"
-	icacallbackstypes "github.com/Stride-Labs/stride/v24/x/icacallbacks/types"
-	recordstypes "github.com/Stride-Labs/stride/v24/x/records/types"
-	"github.com/Stride-Labs/stride/v24/x/stakeibc/types"
+	"github.com/Stride-Labs/stride/v26/utils"
+	icacallbackstypes "github.com/Stride-Labs/stride/v26/x/icacallbacks/types"
+	recordstypes "github.com/Stride-Labs/stride/v26/x/records/types"
+	"github.com/Stride-Labs/stride/v26/x/stakeibc/types"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -190,7 +190,7 @@ func (k Keeper) GetLatestUnbondingCompletionTime(ctx sdk.Context, msgResponses [
 			return 0, errorsmod.Wrapf(types.ErrUnmarshalFailure, "Unable to unmarshal undelegation tx response: %s", err.Error())
 		}
 
-		responseCompletionTime := uint64(undelegateResponse.CompletionTime.UnixNano())
+		responseCompletionTime := utils.IntToUint(undelegateResponse.CompletionTime.UnixNano())
 		if responseCompletionTime > latestCompletionTime {
 			latestCompletionTime = responseCompletionTime
 		}

@@ -42,6 +42,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- GH ACTIONS TEMPLATE - INSERT NEW VERSION HERE -->
 
+## [v26.0.0](https://github.com/Stride-Labs/stride/releases/tag/v26.0.0) - 2025-02-28
+
+### On-Chain changes
+
+1. Buyback and Burn ([#1318](https://github.com/Stride-Labs/stride/pull/1318))
+2. fixed gosec errors ([#1350](https://github.com/Stride-Labs/stride/pull/1350))
+3. version bumps (ibc, pfm, wasmvm, cobra) ([#1360](https://github.com/Stride-Labs/stride/pull/1360), [#1361](https://github.com/Stride-Labs/stride/pull/1361), [#1345](https://github.com/Stride-Labs/stride/pull/1345))
+4. v26 Import Paths ([#1367](https://github.com/Stride-Labs/stride/pull/1367))
+5. Localstride changes ([#1370](https://github.com/Stride-Labs/stride/pull/1370))
+6. add txBytes support to `strided tx decode` in addition to signBytes ([#1347](https://github.com/Stride-Labs/stride/pull/1347))
+
+### Off-Chain changes
+
+1. Updated dockernet hermes ([#1342](https://github.com/Stride-Labs/stride/pull/1342))
+2. Bump vitest from 2.0.3 to 2.1.9 in /integration-tests/client ([#1353](https://github.com/Stride-Labs/stride/pull/1353))
+
+## [v25.1.0](https://github.com/Stride-Labs/stride/releases/tag/v25.1.0) - 2025-02-03
+
+### On-Chain changes
+
+1. Increment Rebalance Period by 1 Day ([#1308](https://github.com/Stride-Labs/stride/pull/1308))
+2. stTIA Migration ([#1271](https://github.com/Stride-Labs/stride/pull/1271), [#1330](https://github.com/Stride-Labs/stride/pull/1330), [#1337](https://github.com/Stride-Labs/stride/pull/1337), [#1338](https://github.com/Stride-Labs/stride/pull/1338))
+3. v25 Import Paths ([#1333](https://github.com/Stride-Labs/stride/pull/1333))
+4. Fixed stuck LSM records ([#1335](https://github.com/Stride-Labs/stride/pull/1335))
+5. Update outer bounds + Celestia inner bounds + tests ([#1329](https://github.com/Stride-Labs/stride/pull/1329))
+6. Executes Prop 256 in Upgrade Handler ([#1332](https://github.com/Stride-Labs/stride/pull/1332))
+7. Version bumps (sdk, wasmvm, sdkmath, x/crypto, cometbft) ([#1331](https://github.com/Stride-Labs/stride/pull/1331), [#1297](https://github.com/Stride-Labs/stride/pull/1297), [#1306](https://github.com/Stride-Labs/stride/pull/1306), [#1285](https://github.com/Stride-Labs/stride/pull/1285), [#1317](https://github.com/Stride-Labs/stride/pull/1317), [#1309](https://github.com/Stride-Labs/stride/pull/1309), [#1324](https://github.com/Stride-Labs/stride/pull/1324), [#1340](https://github.com/Stride-Labs/stride/pull/1340))
+
+### Off-Chain changes
+
+1. Add forge.json file to display Stride's Forge (ICS directory) page correctly ([#1301](https://github.com/Stride-Labs/stride/pull/1301))
+2. liquid stake dockernet integration test ([#1269](https://github.com/Stride-Labs/stride/pull/1269))
+3. Added osmosis to integration test framework ([#1328](https://github.com/Stride-Labs/stride/pull/1328))
+
+### API Breaking Changes from stTIA Migration
+
+- Liquid stakes will now go through `stakeibc`
+- Redemptions will still be processed through `staketia` until everything's been unstaked (estimated to be in a few months)
+- Once everything's been unstaked, liquid stakes and redemptions will go through `stakeibc`. This transition can be witnessed by tracking the `redemptions_enabled` field on the stakeibc host zone query, which will flip to `true`
+- Redemption records should be queried across both modules. Relevant queries:
+  - `/Stride-Labs/stride/stakeibc/unbondings/{address}`
+  - `/Stride-Labs/stride/staketia/unbonding_records`
+  - `/Stride-Labs/stride/staketia/redemption_record/{unbonding_record_id}/{address}`
+- The redemption rate can now be found on the [stakeibc host zone query](https://stride-api.polkachu.com/Stride-Labs/stride/stakeibc/host_zone/celestia) instead of the [staketia host zone query](https://stride-api.polkachu.com/Stride-Labs/stride/staketia/host_zone).
+
 ## [v24.0.0](https://github.com/Stride-Labs/stride/releases/tag/v24.0.0) - 2024-08-29
 
 ### On-Chain changes

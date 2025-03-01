@@ -9,9 +9,9 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/gogoproto/proto"
 
-	"github.com/Stride-Labs/stride/v24/utils"
-	recordstypes "github.com/Stride-Labs/stride/v24/x/records/types"
-	"github.com/Stride-Labs/stride/v24/x/stakeibc/types"
+	"github.com/Stride-Labs/stride/v26/utils"
+	recordstypes "github.com/Stride-Labs/stride/v26/x/records/types"
+	"github.com/Stride-Labs/stride/v26/x/stakeibc/types"
 )
 
 // Builds the delegation ICA messages for a given deposit record
@@ -148,7 +148,7 @@ func (k Keeper) StakeExistingDepositsOnHostZones(ctx sdk.Context, epochNumber ui
 		}
 
 		// Submit the delegation messages in batchs
-		delegateBatchSize := int(hostZone.MaxMessagesPerIcaTx)
+		delegateBatchSize := int(utils.UintToInt(hostZone.MaxMessagesPerIcaTx))
 		numTxsSubmitted, err := k.BatchSubmitDelegationICAMessages(ctx, hostZone, depositRecord, msgs, delegations, delegateBatchSize)
 		if err != nil {
 			k.Logger(ctx).Error(fmt.Sprintf("Unable to submit delegation ICA: %s", err.Error()))

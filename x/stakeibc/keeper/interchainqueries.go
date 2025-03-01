@@ -13,11 +13,11 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/gogoproto/proto"
 
-	epochstypes "github.com/Stride-Labs/stride/v24/x/epochs/types"
+	epochstypes "github.com/Stride-Labs/stride/v26/x/epochs/types"
 
-	"github.com/Stride-Labs/stride/v24/utils"
-	icqtypes "github.com/Stride-Labs/stride/v24/x/interchainquery/types"
-	"github.com/Stride-Labs/stride/v24/x/stakeibc/types"
+	"github.com/Stride-Labs/stride/v26/utils"
+	icqtypes "github.com/Stride-Labs/stride/v26/x/interchainquery/types"
+	"github.com/Stride-Labs/stride/v26/x/stakeibc/types"
 )
 
 // Submit a validator sharesToTokens rate ICQ as triggered either manually or epochly with a conservative timeout
@@ -208,7 +208,7 @@ func (k Keeper) SubmitWithdrawalHostBalanceICQ(ctx sdk.Context, hostZone types.H
 	if !found {
 		return errorsmod.Wrapf(types.ErrEpochNotFound, "epoch %s not found", epochstypes.STRIDE_EPOCH)
 	}
-	timeout := time.Unix(0, int64(strideEpochTracker.NextEpochStartTime))
+	timeout := time.Unix(0, utils.UintToInt(strideEpochTracker.NextEpochStartTime))
 	timeoutDuration := timeout.Sub(ctx.BlockTime())
 
 	// Submit the ICQ for the withdrawal account balance

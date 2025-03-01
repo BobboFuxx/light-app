@@ -10,9 +10,9 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	transfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
 
-	"github.com/Stride-Labs/stride/v24/utils"
-	"github.com/Stride-Labs/stride/v24/x/stakedym/types"
-	stakeibctypes "github.com/Stride-Labs/stride/v24/x/stakeibc/types"
+	"github.com/Stride-Labs/stride/v26/utils"
+	"github.com/Stride-Labs/stride/v26/x/stakedym/types"
+	stakeibctypes "github.com/Stride-Labs/stride/v26/x/stakeibc/types"
 )
 
 // Liquid stakes native tokens and returns stTokens to the user
@@ -117,7 +117,7 @@ func (k Keeper) PrepareDelegation(ctx sdk.Context, epochNumber uint64, epochDura
 	}
 
 	// Timeout the transfer at the end of the epoch
-	timeoutTimestamp := uint64(ctx.BlockTime().Add(epochDuration).UnixNano())
+	timeoutTimestamp := utils.IntToUint(ctx.BlockTime().Add(epochDuration).UnixNano())
 
 	// Transfer the native tokens to the host chain
 	transferMsgDepositToDelegation := transfertypes.MsgTransfer{

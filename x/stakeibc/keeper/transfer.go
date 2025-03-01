@@ -14,10 +14,10 @@ import (
 	clienttypes "github.com/cosmos/ibc-go/v7/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
 
-	"github.com/Stride-Labs/stride/v24/utils"
-	epochstypes "github.com/Stride-Labs/stride/v24/x/epochs/types"
-	recordstypes "github.com/Stride-Labs/stride/v24/x/records/types"
-	"github.com/Stride-Labs/stride/v24/x/stakeibc/types"
+	"github.com/Stride-Labs/stride/v26/utils"
+	epochstypes "github.com/Stride-Labs/stride/v26/x/epochs/types"
+	recordstypes "github.com/Stride-Labs/stride/v26/x/records/types"
+	"github.com/Stride-Labs/stride/v26/x/stakeibc/types"
 )
 
 // Iterate each deposit record marked TRANSFER_QUEUE and IBC transfer tokens from the Stride controller account to the delegation ICAs on each host zone
@@ -67,7 +67,7 @@ func (k Keeper) TransferExistingDepositsToHostZones(ctx sdk.Context, epochNumber
 		// if we onboard non-tendermint chains, we need to use the time on the host chain to
 		// calculate the timeout
 		// https://github.com/cometbft/cometbft/blob/v0.34.x/spec/consensus/bft-time.md
-		timeoutTimestamp := uint64(ctx.BlockTime().UnixNano()) + ibcTransferTimeoutNanos
+		timeoutTimestamp := utils.IntToUint(ctx.BlockTime().UnixNano()) + ibcTransferTimeoutNanos
 		msg := ibctypes.NewMsgTransfer(
 			ibctransfertypes.PortID,
 			hostZone.TransferChannelId,

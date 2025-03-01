@@ -23,14 +23,14 @@ import (
 	icahosttypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/host/types"
 	transfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
 
-	"github.com/Stride-Labs/stride/v24/utils"
-	epochskeeper "github.com/Stride-Labs/stride/v24/x/epochs/keeper"
-	epochstypes "github.com/Stride-Labs/stride/v24/x/epochs/types"
-	mintkeeper "github.com/Stride-Labs/stride/v24/x/mint/keeper"
-	minttypes "github.com/Stride-Labs/stride/v24/x/mint/types"
-	stakeibckeeper "github.com/Stride-Labs/stride/v24/x/stakeibc/keeper"
-	newstakeibctypes "github.com/Stride-Labs/stride/v24/x/stakeibc/migrations/v3/types"
-	stakeibctypes "github.com/Stride-Labs/stride/v24/x/stakeibc/types"
+	"github.com/Stride-Labs/stride/v26/utils"
+	epochskeeper "github.com/Stride-Labs/stride/v26/x/epochs/keeper"
+	epochstypes "github.com/Stride-Labs/stride/v26/x/epochs/types"
+	mintkeeper "github.com/Stride-Labs/stride/v26/x/mint/keeper"
+	minttypes "github.com/Stride-Labs/stride/v26/x/mint/types"
+	stakeibckeeper "github.com/Stride-Labs/stride/v26/x/stakeibc/keeper"
+	newstakeibctypes "github.com/Stride-Labs/stride/v26/x/stakeibc/migrations/v3/types"
+	stakeibctypes "github.com/Stride-Labs/stride/v26/x/stakeibc/types"
 )
 
 // CreateUpgradeHandler creates an SDK upgrade handler for v7
@@ -187,8 +187,8 @@ func AddRedemptionRateSafetyChecks(cdc codec.Codec, storeKey storetypes.StoreKey
 	k.SetParams(ctx, params)
 
 	// Get default min/max redemption rate
-	defaultMinRedemptionRate := sdk.NewDecWithPrec(int64(params.DefaultMinRedemptionRateThreshold), 2)
-	defaultMaxRedemptionRate := sdk.NewDecWithPrec(int64(params.DefaultMaxRedemptionRateThreshold), 2)
+	defaultMinRedemptionRate := sdk.NewDecWithPrec(utils.UintToInt(params.DefaultMinRedemptionRateThreshold), 2)
+	defaultMaxRedemptionRate := sdk.NewDecWithPrec(utils.UintToInt(params.DefaultMaxRedemptionRateThreshold), 2)
 
 	for _, hostZone := range GetAllHostZone(cdc, storeKey, ctx) {
 

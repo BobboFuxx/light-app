@@ -35,8 +35,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/Stride-Labs/stride/v24/app"
-	"github.com/Stride-Labs/stride/v24/utils"
+	"github.com/Stride-Labs/stride/v26/app"
+	"github.com/Stride-Labs/stride/v26/utils"
 )
 
 var (
@@ -81,7 +81,11 @@ type AppTestHelper struct {
 // AppTestHelper Constructor
 func (s *AppTestHelper) Setup() {
 	s.App = app.InitStrideTestApp(true)
-	s.Ctx = s.App.BaseApp.NewContext(false, tmtypesproto.Header{Height: 1, ChainID: StrideChainID})
+	s.Ctx = s.App.BaseApp.NewContext(false, tmtypesproto.Header{
+		Height:  1,
+		ChainID: StrideChainID,
+		Time:    time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+	})
 	s.QueryHelper = &baseapp.QueryServiceTestHelper{
 		GRPCQueryRouter: s.App.GRPCQueryRouter(),
 		Ctx:             s.Ctx,
@@ -273,7 +277,7 @@ func (s *AppTestHelper) CreateICAChannel(owner string) (channelID, portID string
 	icaPath = CopyConnectionAndClientToPath(icaPath, s.TransferPath)
 
 	// Register the ICA and complete the handshake
-	s.RegisterInterchainAccount(icaPath.EndpointA, owner)
+	s.RegisterInterchainAccountWithOrdering(icaPath.EndpointA, owner)
 
 	err := icaPath.EndpointB.ChanOpenTry()
 	s.Require().NoError(err, "ChanOpenTry error")
@@ -305,7 +309,7 @@ func (s *AppTestHelper) CreateICAChannel(owner string) (channelID, portID string
 
 // Register's a new ICA account on the next channel available
 // This function assumes a connection already exists
-func (s *AppTestHelper) RegisterInterchainAccount(endpoint *ibctesting.Endpoint, owner string) {
+func (s *AppTestHelper) RegisterInterchainAccountWithOrdering(endpoint *ibctesting.Endpoint, owner string) {
 	// Get the port ID from the owner name (i.e. "icacontroller-{owner}")
 	portID, err := icatypes.NewControllerPortID(owner)
 	s.Require().NoError(err, "owner to portID error")
@@ -313,7 +317,7 @@ func (s *AppTestHelper) RegisterInterchainAccount(endpoint *ibctesting.Endpoint,
 	// Get the next channel available and register the ICA
 	channelSequence := s.App.IBCKeeper.ChannelKeeper.GetNextChannelSequence(s.Ctx)
 
-	err = s.App.ICAControllerKeeper.RegisterInterchainAccount(s.Ctx, endpoint.ConnectionID, owner, TestIcaVersion)
+	err = s.App.ICAControllerKeeper.RegisterInterchainAccountWithOrdering(s.Ctx, endpoint.ConnectionID, owner, TestIcaVersion, channeltypes.ORDERED)
 	s.Require().NoError(err, "register interchain account error")
 
 	// Commit the state
@@ -523,7 +527,7 @@ func (s *AppTestHelper) MockClientLatestHeight(height uint64) {
 // This also mocks out the consensus state to enable testing registering interchain accounts
 func (s *AppTestHelper) MockClientAndConnection(chainId, clientId, connectionId string) {
 	clientHeight := clienttypes.Height{
-		RevisionHeight: uint64(s.Ctx.BlockHeight()),
+		RevisionHeight: utils.IntToUint(s.Ctx.BlockHeight()),
 	}
 	clientState := tendermint.ClientState{
 		ChainId:        chainId,

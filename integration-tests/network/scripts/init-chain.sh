@@ -9,7 +9,8 @@ wait_for_api $API_ENDPOINT
 
 # check if the binary has genesis subcommand or not, if not, set CHAIN_GENESIS_CMD to empty
 genesis_json=${CHAIN_HOME}/config/genesis.json
-chain_genesis_command=$($BINARY 2>&1 | grep -q "genesis-related subcommands" && echo "genesis" || echo "")
+chain_genesis_command=$($BINARY --help 2>&1  | grep -q "genesis-related subcommands" && echo "genesis" || echo "")
+client_config_command=$($BINARY config --help 2>&1  | grep -q "Set an application config" && echo "config set client" || echo "config")
 
 # Helper to update a json attribute in-place
 jq_inplace() {
@@ -23,7 +24,8 @@ jq_inplace() {
 init_config() {
     moniker=${CHAIN_NAME}1
     $BINARY init $moniker --chain-id $CHAIN_ID --overwrite 
-    $BINARY config keyring-backend test
+    $BINARY $client_config_command chain-id $CHAIN_ID
+    $BINARY $client_config_command keyring-backend test
 }
 
 # Helper to upload shared files to the API
@@ -123,7 +125,7 @@ update_default_genesis() {
 
     jq_inplace '.app_state.staking.params.unbonding_time |= "'$UNBONDING_TIME'"' $genesis_json
     jq_inplace '.app_state.gov.params.max_deposit_period |= "'$DEPOSIT_PERIOD'"' $genesis_json 
-    jq_inplace '.app_state.gov.params.voting_period |= "'$VOTING_PERIOD'"' $genesis_json 
+    jq_inplace '.app_state.gov.params.voting_period |= "'$VOTING_PERIOD'"' $genesis_json
 
     if jq 'has(.app_state.gov.params.expedited_voting_period)' $genesis_json > /dev/null 2>&1; then
         jq_inplace '.app_state.gov.params.expedited_voting_period |= "'$EXPEDITED_VOTING_PERIOD'"' $genesis_json 
@@ -135,17 +137,29 @@ update_stride_genesis() {
     echo "Updating genesis.json with stride configuration..."
 
     jq_inplace '(.app_state.epochs.epochs[] | select(.identifier=="day") ).duration |= "'$STRIDE_DAY_EPOCH_DURATION'"' $genesis_json 
-    jq_inplace '(.app_state.epochs.epochs[] | select(.identifier=="stride_epoch") ).duration |= "'$STRIDE_EPOCH_EPOCH_DURATION'"' $genesis_json 
+    jq_inplace '(.app_state.epochs.epochs[] | select(.identifier=="stride_epoch") ).duration |= "'$STRIDE_EPOCH_EPOCH_DURATION'"' $genesis_json
+    jq_inplace '(.app_state.epochs.epochs[] | select(.identifier=="mint") ).duration |= "'$STRIDE_MINT_EPOCH_DURATION'"' $genesis_json 
 
     $BINARY add-consumer-section --validator-public-keys $validator_public_keys
     jq_inplace '.app_state.ccvconsumer.params.unbonding_period |= "'$UNBONDING_TIME'"' $genesis_json 
 
-    jq_inplace '.app_state.airdrop.params.period_length_seconds |= "'${AIRDROP_PERIOD_LENGTH}'"' $genesis_json 
+    jq_inplace '.app_state.airdrop.params.period_length_seconds |= "'${AIRDROP_PERIOD_SECONDS}'"' $genesis_json 
+
+    jq_inplace '.app_state.icqoracle.params.osmosis_chain_id |= "'$ICQORACLE_OSMOSIS_CHAIN_ID'"' $genesis_json
+    jq_inplace '.app_state.icqoracle.params.osmosis_connection_id |= "'$ICQORACLE_OSMOSIS_CONNECTION_ID'"' $genesis_json
+    jq_inplace '.app_state.icqoracle.params.update_interval_sec |= "'$ICQORACLE_UPDATE_INTERVAL_SEC'"' $genesis_json
+    jq_inplace '.app_state.icqoracle.params.price_expiration_timeout_sec |= "'$ICQORACLE_PRICE_EXPIRATION_TIMEOUT_SEC'"' $genesis_json
 }
 
 # Genesis updates specific to non-stride chains
 update_host_genesis() {
     echo "Updating genesis.json with host configuration..."
+
+    if [[ "$CHAIN_NAME" == "osmosis" ]]; then
+        strd_on_osmo="ibc/FF6C2E86490C1C4FBBD24F55032831D2415B9D7882F85C3CC9C2401D79362BEA"
+        atom_on_osmo="ibc/6CDD4663F2F09CD62285E2D45891FC149A3568E316CE3EBBE201A71A78A69388" # through stride
+        jq_inplace '.app_state.concentratedliquidity.params.is_permissionless_pool_creation_enabled |= true' $genesis_json 
+    fi
 }
 
 # Saves the genesis file in the API
@@ -171,4 +185,4 @@ main() {
     echo "Done"
 }
 
-main
+main >> logs/startup.log 2>&1 

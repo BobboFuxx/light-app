@@ -15,13 +15,14 @@ import (
 	icatypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
 	connectiontypes "github.com/cosmos/ibc-go/v7/modules/core/03-connection/types"
+	channeltypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
 	"github.com/spf13/cast"
 
-	"github.com/Stride-Labs/stride/v24/utils"
-	epochtypes "github.com/Stride-Labs/stride/v24/x/epochs/types"
-	recordstypes "github.com/Stride-Labs/stride/v24/x/records/types"
-	recordtypes "github.com/Stride-Labs/stride/v24/x/records/types"
-	"github.com/Stride-Labs/stride/v24/x/stakeibc/types"
+	"github.com/Stride-Labs/stride/v26/utils"
+	epochtypes "github.com/Stride-Labs/stride/v26/x/epochs/types"
+	recordstypes "github.com/Stride-Labs/stride/v26/x/records/types"
+	recordtypes "github.com/Stride-Labs/stride/v26/x/records/types"
+	"github.com/Stride-Labs/stride/v26/x/stakeibc/types"
 )
 
 type msgServer struct {
@@ -538,7 +539,7 @@ func (k msgServer) RestoreInterchainAccount(goCtx context.Context, msg *types.Ms
 		TxType:                 icatypes.TxTypeSDKMultiMsg,
 	}))
 
-	if err := k.ICAControllerKeeper.RegisterInterchainAccount(ctx, msg.ConnectionId, msg.AccountOwner, appVersion); err != nil {
+	if err := k.ICAControllerKeeper.RegisterInterchainAccountWithOrdering(ctx, msg.ConnectionId, msg.AccountOwner, appVersion, channeltypes.ORDERED); err != nil {
 		return nil, errorsmod.Wrapf(err, "unable to register account for owner %s", msg.AccountOwner)
 	}
 
@@ -634,7 +635,7 @@ func (k msgServer) CloseDelegationChannel(goCtx context.Context, msg *types.MsgC
 	}}
 
 	// Timeout the ICA 1 nanosecond after the current block time (so it's impossible to be relayed)
-	timeoutTimestamp := uint64(ctx.BlockTime().UnixNano() + 1)
+	timeoutTimestamp := utils.IntToUint(ctx.BlockTime().UnixNano() + 1)
 	err := k.SubmitICATxWithoutCallback(ctx, hostZone.ConnectionId, delegationIcaOwner, msgSend, timeoutTimestamp)
 	if err != nil {
 		return nil, err
@@ -802,7 +803,7 @@ func (k msgServer) ToggleTradeController(
 
 	// Submit the ICA tx from the trade ICA account
 	// Timeout the ICA at 1 hour
-	timeoutTimestamp := uint64(ctx.BlockTime().Add(time.Hour).UnixNano())
+	timeoutTimestamp := utils.IntToUint(ctx.BlockTime().Add(time.Hour).UnixNano())
 	err = k.SubmitICATxWithoutCallback(
 		ctx,
 		tradeRoute.TradeAccount.ConnectionId,
